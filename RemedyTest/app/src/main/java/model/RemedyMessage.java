@@ -11,6 +11,7 @@ public class RemedyMessage {
     private String agentID;
     private String customerID;
     private boolean sentByCustomer;
+    private String message;
 
     public Date getSendDate() {
         return sendDate;
@@ -42,5 +43,13 @@ public class RemedyMessage {
 
     public void setSentByCustomer(boolean sentByCustomer) {
         this.sentByCustomer = sentByCustomer;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
