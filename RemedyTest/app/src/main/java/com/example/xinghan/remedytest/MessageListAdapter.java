@@ -26,28 +26,28 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
+        System.out.println("@@@: " + mMessageList.size());
         return mMessageList.size();
     }
 
     // Determines the appropriate ViewType according to the sender of the message.
     @Override
     public int getItemViewType(int position) {
-        RemedyMessage message = (RemedyMessage) mMessageList.get(position);
-//
-//        if (message.getAgentID().equals(.getCurrentUser().getUserId())) {
-//            // If the current user is the sender of the message
-//            return VIEW_TYPE_MESSAGE_SENT;
-//        } else {
-//            // If some other user sent the message
-//            return VIEW_TYPE_MESSAGE_RECEIVED;
-//        }
+        System.out.println("@@@ 2");
 
-        return 0;
+        RemedyMessage message = (RemedyMessage) mMessageList.get(position);
+
+        if (message.isSentByCustomer()) {
+            return VIEW_TYPE_MESSAGE_SENT;
+        } else {
+            return VIEW_TYPE_MESSAGE_RECEIVED;
+        }
     }
 
     // Inflates the appropriate layout according to the ViewType.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        System.out.println("@@@ 3");
         View view;
 
         if (viewType == VIEW_TYPE_MESSAGE_SENT) {
@@ -66,6 +66,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     // Passes the message object to a ViewHolder so that the contents can be bound to UI.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        System.out.println("@@@ 4");
         RemedyMessage message = (RemedyMessage) mMessageList.get(position);
 
         switch (holder.getItemViewType()) {
@@ -82,12 +83,14 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
         SentMessageHolder(View itemView) {
             super(itemView);
+            System.out.println("@@@ 5");
 
-            messageText = (TextView) itemView.findViewById(R.id.text_message_body);
-            timeText = (TextView) itemView.findViewById(R.id.text_message_time);
+            messageText = (TextView) itemView.findViewById(R.id.sent_text_message_body);
+            timeText = (TextView) itemView.findViewById(R.id.sent_text_message_time);
         }
 
         void bind(RemedyMessage message) {
+            System.out.println("@@@ 6");
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
@@ -101,14 +104,16 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
         ReceivedMessageHolder(View itemView) {
             super(itemView);
+            System.out.println("@@@ 7");
 
-            messageText = (TextView) itemView.findViewById(R.id.text_message_body);
-            timeText = (TextView) itemView.findViewById(R.id.text_message_time);
-            nameText = (TextView) itemView.findViewById(R.id.text_message_name);
-            profileImage = (ImageView) itemView.findViewById(R.id.image_message_profile);
+            messageText = (TextView) itemView.findViewById(R.id.received_text_message_body);
+            timeText = (TextView) itemView.findViewById(R.id.received_text_message_time);
+            nameText = (TextView) itemView.findViewById(R.id.received_text_message_name);
+            profileImage = (ImageView) itemView.findViewById(R.id.received_image_message_profile);
         }
 
         void bind(RemedyMessage message) {
+            System.out.println("@@@ 8");
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
