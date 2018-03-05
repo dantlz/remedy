@@ -1,0 +1,128 @@
+package com.example.xinghan.remedy_alpha;
+
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.util.List;
+
+import model.RemedyMessage;
+
+public class MessageListAdapter extends RecyclerView.Adapter {
+    private static final int VIEW_TYPE_MESSAGE_SENT = 1;
+    private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
+
+    private Context mContext;
+    private List<RemedyMessage> mMessageList;
+
+    public MessageListAdapter(Context context, List<RemedyMessage> messageList) {
+        mContext = context;
+        mMessageList = messageList;
+    }
+
+    @Override
+    public int getItemCount() {
+        System.out.println("@@@: " + mMessageList.size());
+        return mMessageList.size();
+    }
+
+    // Determines the appropriate ViewType according to the sender of the message.
+    @Override
+    public int getItemViewType(int position) {
+        System.out.println("@@@ 2");
+
+        RemedyMessage message = (RemedyMessage) mMessageList.get(position);
+
+        if (message.isSentByCustomer()) {
+            return VIEW_TYPE_MESSAGE_SENT;
+        } else {
+            return VIEW_TYPE_MESSAGE_RECEIVED;
+        }
+    }
+
+    // Inflates the appropriate layout according to the ViewType.
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        System.out.println("@@@ 3");
+        View view;
+
+        if (viewType == VIEW_TYPE_MESSAGE_SENT) {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_message_sent, parent, false);
+            return new SentMessageHolder(view);
+        } else if (viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_message_received, parent, false);
+            return new ReceivedMessageHolder(view);
+        }
+
+        return null;
+    }
+
+    // Passes the message object to a ViewHolder so that the contents can be bound to UI.
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        System.out.println("@@@ 4");
+        RemedyMessage message = (RemedyMessage) mMessageList.get(position);
+
+        switch (holder.getItemViewType()) {
+            case VIEW_TYPE_MESSAGE_SENT:
+                ((SentMessageHolder) holder).bind(message);
+                break;
+            case VIEW_TYPE_MESSAGE_RECEIVED:
+                ((ReceivedMessageHolder) holder).bind(message);
+        }
+    }
+
+    private class SentMessageHolder extends RecyclerView.ViewHolder {
+        TextView messageText, timeText;
+
+        SentMessageHolder(View itemView) {
+            super(itemView);
+            System.out.println("@@@ 5");
+
+            messageText = (TextView) itemView.findViewById(R.id.sent_text_message_body);
+            timeText = (TextView) itemView.findViewById(R.id.sent_text_message_time);
+        }
+
+        void bind(RemedyMessage message) {
+            System.out.println("@@@ 6");
+            messageText.setText(message.getMessage());
+
+            // Format the stored timestamp into a readable String using method.
+            timeText.setText(message.getSendDate().toString());
+        }
+    }
+
+    private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
+        TextView messageText, timeText, nameText;
+        ImageView profileImage;
+
+        ReceivedMessageHolder(View itemView) {
+            super(itemView);
+            System.out.println("@@@ 7");
+
+            messageText = (TextView) itemView.findViewById(R.id.received_text_message_body);
+            timeText = (TextView) itemView.findViewById(R.id.received_text_message_time);
+            nameText = (TextView) itemView.findViewById(R.id.received_text_message_name);
+            profileImage = (ImageView) itemView.findViewById(R.id.received_image_message_profile);
+        }
+
+        void bind(RemedyMessage message) {
+            System.out.println("@@@ 8");
+            messageText.setText(message.getMessage());
+
+            // Format the stored timestamp into a readable String using method.
+            timeText.setText(message.getSendDate().toString());
+
+            nameText.setText(message.getAgentID());
+
+            // Insert the profile image from the URL into the ImageView.
+//            Utils.displayRoundImageFromUrl(mContext, message.getSender().getProfileUrl(), profileImage);
+        }
+    }
+}
