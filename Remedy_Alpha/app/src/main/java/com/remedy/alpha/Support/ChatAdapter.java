@@ -28,15 +28,12 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        System.out.println("@@@: " + mMessageList.size());
         return mMessageList.size();
     }
 
     // Determines the appropriate ViewType according to the sender of the message.
     @Override
     public int getItemViewType(int position) {
-        System.out.println("@@@ 2");
-
         RemedyMessage message = (RemedyMessage) mMessageList.get(position);
 
         if (message.isSentByCustomer()) {
@@ -49,7 +46,6 @@ public class ChatAdapter extends RecyclerView.Adapter {
     // Inflates the appropriate layout according to the ViewType.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        System.out.println("@@@ 3");
         View view;
 
         if (viewType == VIEW_TYPE_MESSAGE_SENT) {
@@ -68,7 +64,6 @@ public class ChatAdapter extends RecyclerView.Adapter {
     // Passes the message object to a ViewHolder so that the contents can be bound to UI.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        System.out.println("@@@ 4");
         RemedyMessage message = (RemedyMessage) mMessageList.get(position);
 
         switch (holder.getItemViewType()) {
@@ -85,14 +80,12 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
         SentMessageHolder(View itemView) {
             super(itemView);
-            System.out.println("@@@ 5");
 
             messageText = (TextView) itemView.findViewById(R.id.sent_text_message_body);
             timeText = (TextView) itemView.findViewById(R.id.sent_text_message_time);
         }
 
         void bind(RemedyMessage message) {
-            System.out.println("@@@ 6");
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
@@ -106,7 +99,6 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
         ReceivedMessageHolder(View itemView) {
             super(itemView);
-            System.out.println("@@@ 7");
 
             messageText = (TextView) itemView.findViewById(R.id.received_text_message_body);
             timeText = (TextView) itemView.findViewById(R.id.received_text_message_time);
@@ -115,7 +107,6 @@ public class ChatAdapter extends RecyclerView.Adapter {
         }
 
         void bind(RemedyMessage message) {
-            System.out.println("@@@ 8");
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.

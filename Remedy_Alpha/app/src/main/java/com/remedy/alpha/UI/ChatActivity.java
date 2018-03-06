@@ -1,5 +1,6 @@
 package com.remedy.alpha.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -64,7 +65,35 @@ public class ChatActivity extends AppCompatActivity {
 
         openConnection();
 
+        if(type.equals("CALL"))
+            moveTaskToBack(true);
+
         configureUI();
+    }
+
+    private void callProtocol(){
+        final String text = "Call me with command: \n/yodel +1" + phoneNumber;
+        final ChatPostMessageMethod message = new ChatPostMessageMethod(currChannelName, text);
+        message.setUsername(currUsername);
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    System.out.println("### POSTING: " + text);
+                    mWebApiClient.postMessage(message);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+
+        Intent intent = new Intent(ChatActivity.this, QueueActivity.class);
+        intent.putExtra("TYPE", "STOP");
+        intent.putExtra("NAME", name);
+        intent.putExtra("PHONE", phoneNumber);
+        intent.putExtra("NOTES", notes);
+        startActivity(intent);
     }
 
     private void configureUI() {
@@ -125,7 +154,10 @@ public class ChatActivity extends AppCompatActivity {
         currChannelName = "customer_" + name + "_" + currID;
         currChannelName = currChannelName.toLowerCase();
 //        currUsername = message.findPath("user").asText();
-        establishChannel();
+        if (type.equals("CHAT"))
+            establishChannel();
+        else
+            callProtocol();
     }
 
     //Create a new channel if it doesn't exist

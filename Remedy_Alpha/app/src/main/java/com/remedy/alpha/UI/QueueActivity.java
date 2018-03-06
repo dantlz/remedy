@@ -26,21 +26,30 @@ public class QueueActivity extends AppCompatActivity {
 
 
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        Runnable response =  new Runnable() {
             public void run() {
 
                 Intent intent;
-                if(type.equals("CHAT")) {
-                    intent = new Intent(QueueActivity.this, ChatActivity.class);
-                    intent.putExtra("TYPE", type);
-                    intent.putExtra("NAME", name);
-                    intent.putExtra("PHONE", phoneNumber);
-                    intent.putExtra("NOTES", notes);
-                    startActivity(intent);
-                }
+                intent = new Intent(QueueActivity.this, ChatActivity.class);
+
+                intent.putExtra("TYPE", type);
+                intent.putExtra("NAME", name);
+                intent.putExtra("PHONE", phoneNumber);
+                intent.putExtra("NOTES", notes);
+                if (type.equals("CALL"))
+                    intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+
+                startActivity(intent);
             }
-        }, 3000);
+        };
+        if (type.equals("CHAT"))
+            handler.postDelayed(response, 3000);
+        if(type.equals("CALL")) {
+            response.run();
+        }
     }
+
+    //TODO Move connections here
 
 
 }

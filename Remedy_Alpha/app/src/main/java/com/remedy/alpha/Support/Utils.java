@@ -16,14 +16,10 @@ import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
 import com.remedy.alpha.model.RemedyMessage;
 
-/**
- * Created by tianlinz on 2/28/18.
- */
 
 public class Utils {
 
-    public static final String Danny2_slackToken = "xoxp-303668528658-317362446608-324263846320-5c6b0641baa5bf11d2b68b6a5fd88af0";
-    //                    final String Danny_slackToken = "xoxp-303668528658-306016894690-318824757078-32c4eb2f9c0473f6bae7856d1e860519";
+    public static final String Danny2_slackToken = "";
 
     public static RemedyMessage createRemedyMessage(String agentID, String userID, boolean sentByCustomer, Date sentDate){
         RemedyMessage rMessage = new RemedyMessage();
