@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.xinghan.remedy_alpha">
+    package="com.remedy.alpha">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -12,8 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.xinghan.remedy_alpha.MessageListActivity"
-            android:label="@string/title_activity_message_list"
+            android:name=".UI.ProbDescActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +20,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".UI.ContactTypeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.ContactInfoActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.QueueActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.ChatActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.remedy.alpha.UI.QueueActivity">
+
+    <ImageView
+        android:id="@+id/chatQueueHeaderBGImageView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/chat_queue_bg"
+        android:contentDescription="@string/chat_queue_bg_img"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="254dp"
+        android:layout_height="195dp"
+        android:layout_marginEnd="53dp"
+        android:layout_marginStart="53dp"
+        android:layout_marginTop="90dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chatQueueHeaderBGImageView"
+        app:srcCompat="@drawable/chat_queue_ph" />
+
+</android.support.constraint.ConstraintLayout>

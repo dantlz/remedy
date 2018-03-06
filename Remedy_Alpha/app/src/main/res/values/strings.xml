@@ -1,4 +1,31 @@
 <resources>
-    <string name="app_name">RemedyTest</string>
+    <string name="app_name">remedy</string>
+    <string-array name="prob_desc_array">
+        <item>Select an option</item>
+        <item>Returns/Exchanges</item>
+        <item>Defective Item</item>
+        <item>Track Order</item>
+        <item>Billing Problem</item>
+        <item>Account Issues</item>
+        <item>Missing Items</item>
+    </string-array>
+
     <string name="title_activity_message_list">MessageListActivity</string>
+
+    <string name="enter_button">Enter</string>
+    <string name="call_button">Call me</string>
+    <string name="chat_button">Let\'s chat</string>
+    <string name="done_button">Done</string>
+
+    <string name="desc_text_view">How can we help?</string>
+    <string name="contact_text_view">How would you like to be contacted?</string>
+    <string name="contact_info_text_view">Fill out your contact info</string>
+
+    <string name="prob_desc_bg_img">Background image of problem description page</string>
+    <string name="contact_bg_img">Background image of contact page</string>
+    <string name="contact_info_bg_img">Background image of contact info page</string>
+    <string name="chat_queue_bg_img">Background image of chat queue page</string>
+
+    <string name="notes_edit_text_hint">Additional notes</string>
+    <string name="title_activity_call">CallActivity</string>
 </resources>
