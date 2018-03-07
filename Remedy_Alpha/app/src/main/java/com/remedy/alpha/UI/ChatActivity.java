@@ -207,7 +207,8 @@ public class ChatActivity extends AppCompatActivity {
                             if(sentByCustomer)
                                 message.setCustomerID(user);
                             else
-                                message.setAgentID(user);
+                                message.setAgentID("Agent: " + user);
+                            //TODO Retrieve agent name from agentID
                             message.setMessage(objNode.findPath("text").asText());
                             message.setSendDate(new Date( (long) (objNode.findPath("ts").asInt()) * 1000));
                             channelHistory.add(message);
@@ -263,6 +264,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void messageHandler_Message(JsonNode message) {
         getChannelHistory();
+        //TODO individual message population
 //        mMessageAdapter.notifyDataSetChanged();
 //
 //        //From Sean
