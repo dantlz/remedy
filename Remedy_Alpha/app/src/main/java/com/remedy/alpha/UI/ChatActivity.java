@@ -16,7 +16,9 @@ import com.remedy.alpha.R;
 import com.remedy.alpha.Support.Utils;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -56,7 +58,7 @@ public class ChatActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message_list);
+        setContentView(R.layout.activity_chat);
 
         name = getIntent().getStringExtra("NAME");
         phoneNumber = getIntent().getStringExtra("PHONE");
@@ -103,6 +105,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sendMessage();
+                messageEditText.setText("");
             }
         });
 
@@ -194,20 +197,24 @@ public class ChatActivity extends AppCompatActivity {
                     final JsonNode arrNode = new ObjectMapper().readTree(start).get("messages");
                     if (arrNode.isArray()) {
                         for (final JsonNode objNode : arrNode) {
+
                             RemedyMessage message = new RemedyMessage();
-                            String senderID = objNode.findPath("user").asText();
-                            boolean sentByCustomer = (currID.equals(senderID)) ? true : false;
+                            String user = objNode.findPath("user").asText();
+                            boolean sentByCustomer = (user.equals("")) ? true : false;
+                            if((!user.equals("")) && currID.equals(user))
+                                sentByCustomer = true;
                             message.setSentByCustomer(sentByCustomer);
                             if(sentByCustomer)
-                                message.setCustomerID(senderID);
+                                message.setCustomerID(user);
                             else
-                                message.setAgentID(senderID);
+                                message.setAgentID(user);
                             message.setMessage(objNode.findPath("text").asText());
                             message.setSendDate(new Date( (long) (objNode.findPath("ts").asInt()) * 1000));
                             channelHistory.add(message);
+
                         }
                     }
-
+                    Collections.reverse(channelHistory);
                     System.out.println("@@@: " + channelHistory);
                 } catch (Exception e) {
                     e.printStackTrace();

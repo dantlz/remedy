@@ -17,7 +17,7 @@ public class QueueActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_queue);
+        setContentView(R.layout.activity_queue);
 
         name = getIntent().getStringExtra("NAME");
         phoneNumber = getIntent().getStringExtra("PHONE");

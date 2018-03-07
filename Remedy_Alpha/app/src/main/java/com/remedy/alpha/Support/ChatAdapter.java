@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.remedy.alpha.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.remedy.alpha.model.RemedyMessage;
@@ -89,7 +91,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
-            timeText.setText(message.getSendDate().toString());
+            timeText.setText(new SimpleDateFormat("h:mm a").format(message.getSendDate()));
         }
     }
 
@@ -110,7 +112,8 @@ public class ChatAdapter extends RecyclerView.Adapter {
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
-            timeText.setText(message.getSendDate().toString());
+            timeText.setText(new SimpleDateFormat("h:mm a").format(message.getSendDate()));
+
 
             nameText.setText(message.getAgentID());
 

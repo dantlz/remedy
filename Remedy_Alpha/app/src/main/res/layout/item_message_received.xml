@@ -5,17 +5,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="8dp">
+    android:layout_height="80dp">
 
     <ImageView
         android:id="@+id/received_image_message_profile"
-        android:layout_width="32dp"
+        android:layout_width="0dp"
         android:layout_height="32dp"
-        android:background="@drawable/circle"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent" />
+    <!--android:background="@drawable/circle"-->
 
     <TextView
         android:id="@+id/received_text_message_name"
@@ -50,6 +49,7 @@
         android:textSize="10sp"
         app:layout_constraintLeft_toRightOf="@+id/received_text_message_body"
         android:layout_marginLeft="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/received_text_message_body" />
+        app:layout_constraintBottom_toBottomOf="@+id/received_text_message_body"
+        android:layout_marginBottom="1dp"/>
 
 </android.support.constraint.ConstraintLayout>
