@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric' //used for crash analytics
 
 android {
     compileSdkVersion 26
@@ -27,4 +28,13 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'com.github.pschroen:slack-api-android:c66cc8d997'
+    compile 'com.google.firebase:firebase-core:11.8.0'
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
+        transitive = true
+    }    //used for crash analytics
+    compile 'com.google.firebase:firebase-core:11.8.0' //used for crash analytics
 }
+
+
+apply plugin: 'com.google.gms.google-services'

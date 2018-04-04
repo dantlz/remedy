@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.remedy.alpha.R;
 
 public class ProbDescActivity extends AppCompatActivity {
@@ -18,6 +19,9 @@ public class ProbDescActivity extends AppCompatActivity {
     private Button enterButton;
 
     private String selectedOption;
+
+    //Google Analytics
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,15 @@ public class ProbDescActivity extends AppCompatActivity {
         probDescSpinner.setAdapter(adapter);
         enterButton = (Button)findViewById(R.id.enterButton);
         AttachListeners();
+
+        //Google Analytics: Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        Bundle bundle = new Bundle();
+
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
+
+
     }
 
     private void AttachListeners(){
