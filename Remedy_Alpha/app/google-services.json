@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "248918742701",
+    "firebase_url": "https://remedyalpha-a289b.firebaseio.com",
+    "project_id": "remedyalpha-a289b",
+    "storage_bucket": "remedyalpha-a289b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:248918742701:android:9f28d5fd043212c3",
+        "android_client_info": {
+          "package_name": "com.remedy.alpha"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "248918742701-1g0qn2lrm84g0ot02d01h9jpmv9ci55o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.remedy.alpha",
+            "certificate_hash": "cd18f1d057cc2c5845ac1275f02e48d2d3eaf0f8"
+          }
+        },
+        {
+          "client_id": "248918742701-16ki5glij1jvn5hr4emf1p68tedv3kkh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCu6crQ3RKD39ft2A-7WgygV1Ro2IIITMw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "248918742701-16ki5glij1jvn5hr4emf1p68tedv3kkh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
