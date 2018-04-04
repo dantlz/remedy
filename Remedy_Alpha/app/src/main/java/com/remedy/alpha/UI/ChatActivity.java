@@ -74,7 +74,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void callProtocol(){
-        final String text = "Call me with command: \n/yodel +1" + phoneNumber;
+        final String text = "Call me with command: \n@phonebot call +1" + phoneNumber;
         final ChatPostMessageMethod message = new ChatPostMessageMethod(currChannelName, text);
         message.setUsername(currUsername);
         Thread thread = new Thread() {
