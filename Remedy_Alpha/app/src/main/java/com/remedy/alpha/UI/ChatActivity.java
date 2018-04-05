@@ -1,11 +1,13 @@
 package com.remedy.alpha.UI;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -34,6 +36,9 @@ import allbegray.slack.webapi.method.channels.ChannelJoinMethod;
 import allbegray.slack.webapi.method.chats.ChatPostMessageMethod;
 import com.remedy.alpha.model.RemedyMessage;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class ChatActivity extends AppCompatActivity {
     private RecyclerView mMessageRecycler;
     private ChatAdapter mMessageAdapter;
@@ -53,6 +58,8 @@ public class ChatActivity extends AppCompatActivity {
     private String phoneNumber;
     private String notes;
     private String type;
+
+    private int analysisCounter;
 
     @Override
 
@@ -81,7 +88,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    System.out.println("### POSTING: " + text);
+                    System.out.println("@@@ " + text);
                     mWebApiClient.postMessage(message);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -106,6 +113,11 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 sendMessage();
                 messageEditText.setText("");
+                View curr = getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
             }
         });
 
@@ -157,10 +169,7 @@ public class ChatActivity extends AppCompatActivity {
         currChannelName = "customer_" + name + "_" + currID;
         currChannelName = currChannelName.toLowerCase();
 //        currUsername = message.findPath("user").asText();
-        if (type.equals("CHAT"))
-            establishChannel();
-        else
-            callProtocol();
+        establishChannel();
     }
 
     //Create a new channel if it doesn't exist
@@ -173,7 +182,10 @@ public class ChatActivity extends AppCompatActivity {
                     JsonNode retNode = Utils.execute(joinMethod);
                     currChannelID = retNode.findPath("channel").findPath("id").asText();
                     System.out.println("@@@ Channel established, ID: " + currChannelID);
-                    getChannelHistory();
+                    if (type.equals("CHAT"))
+                        getChannelHistory();
+                    else
+                        callProtocol();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -184,10 +196,14 @@ public class ChatActivity extends AppCompatActivity {
         //Can only configure here since we need to get channelID before getting history
     }
 
+
     private List<RemedyMessage> getChannelHistory(){
         final ChannelHistoryMethod history = new ChannelHistoryMethod(currChannelID);
-        channelHistory = new LinkedList<RemedyMessage>();
+        channelHistory = new LinkedList<>();
+
         Thread thread = new Thread() {
+            JSONObject analysisInput = new JSONObject();
+            JSONArray array = new JSONArray();
 
             @Override
             public void run() {
@@ -195,9 +211,12 @@ public class ChatActivity extends AppCompatActivity {
                     JsonNode retNode = Utils.execute(history);
                     String start = retNode.toString();
                     final JsonNode arrNode = new ObjectMapper().readTree(start).get("messages");
+                    analysisCounter ++;
                     if (arrNode.isArray()) {
-                        for (final JsonNode objNode : arrNode) {
 
+                        int msgCounter = 0;
+
+                        for (final JsonNode objNode : arrNode) {
                             RemedyMessage message = new RemedyMessage();
                             String user = objNode.findPath("user").asText();
                             boolean sentByCustomer = (user.equals("")) ? true : false;
@@ -209,14 +228,28 @@ public class ChatActivity extends AppCompatActivity {
                             else
                                 message.setAgentID("Agent: " + user);
                             //TODO Retrieve agent name from agentID
-                            message.setMessage(objNode.findPath("text").asText());
+                            String text = objNode.findPath("text").asText();
+                            message.setMessage(text);
                             message.setSendDate(new Date( (long) (objNode.findPath("ts").asInt()) * 1000));
                             channelHistory.add(message);
 
+                            if(sentByCustomer && !text.contains("Call me with command:")){
+                                JSONObject obj = new JSONObject();
+                                obj.put(String.valueOf(msgCounter), text);
+                                array.put(obj);
+
+                                msgCounter ++;
+                            }
+                        }
+
+                        if(analysisCounter == 5) {
+                            analysisInput.put("texts", array);
+                            System.out.println("### " + analysisInput);
+                            //TODO GRAB THE JSON FILE HERE
+                            analysisCounter = 0;
                         }
                     }
                     Collections.reverse(channelHistory);
-                    System.out.println("@@@: " + channelHistory);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -239,7 +272,8 @@ public class ChatActivity extends AppCompatActivity {
             public void run() {
                 System.out.println("@@@: SETTING ADAPTER");
                 mMessageRecycler.setAdapter(mMessageAdapter);
-                mMessageAdapter.notifyDataSetChanged();
+                mMessageRecycler.scrollToPosition(channelHistory.size() - 1);
+
             }
         });
         return null;

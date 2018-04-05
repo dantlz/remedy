@@ -84,14 +84,14 @@ public class ChatAdapter extends RecyclerView.Adapter {
             super(itemView);
 
             messageText = (TextView) itemView.findViewById(R.id.sent_text_message_body);
-            timeText = (TextView) itemView.findViewById(R.id.sent_text_message_time);
+//            timeText = (TextView) itemView.findViewById(R.id.sent_text_message_time);
         }
 
         void bind(RemedyMessage message) {
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
-            timeText.setText(new SimpleDateFormat("h:mm a").format(message.getSendDate()));
+//            timeText.setText(new SimpleDateFormat("h:mm a").format(message.getSendDate()));
         }
     }
 
@@ -103,8 +103,8 @@ public class ChatAdapter extends RecyclerView.Adapter {
             super(itemView);
 
             messageText = (TextView) itemView.findViewById(R.id.received_text_message_body);
-            timeText = (TextView) itemView.findViewById(R.id.received_text_message_time);
-            nameText = (TextView) itemView.findViewById(R.id.received_text_message_name);
+//            timeText = (TextView) itemView.findViewById(R.id.received_text_message_time);
+//            nameText = (TextView) itemView.findViewById(R.id.received_text_message_name);
             profileImage = (ImageView) itemView.findViewById(R.id.received_image_message_profile);
         }
 
@@ -112,10 +112,11 @@ public class ChatAdapter extends RecyclerView.Adapter {
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
-            timeText.setText(new SimpleDateFormat("h:mm a").format(message.getSendDate()));
+//            timeText.setText(new SimpleDateFormat("h:mm a").format(message.getSendDate()));
 
 
-            nameText.setText(message.getAgentID());
+//            nameText.setText(message.getAgentID());
+
 
             // Insert the profile image from the URL into the ImageView.
 //            Utils.displayRoundImageFromUrl(mContext, message.getSender().getProfileUrl(), profileImage);

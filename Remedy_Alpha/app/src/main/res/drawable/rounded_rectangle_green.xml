@@ -4,7 +4,7 @@
 
     <!-- View background color -->
     <solid
-        android:color="#35e576" >
+        android:color="#3C8065" >
     </solid>
 
     <!-- The radius makes the corners rounded -->
@@ -14,12 +14,10 @@
 
     <TextView
         android:text="hi man, how are you?"
-        android:background="@drawable/rounded_rectangle_orange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textColor="#ffffff"
-        android:layout_marginTop="4dp"/>
+        android:padding="8dp"/>
+    <!--android:layout_marginTop="4dp"-->
 </shape>
 
 
