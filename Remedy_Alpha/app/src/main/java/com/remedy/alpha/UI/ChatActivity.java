@@ -2,10 +2,12 @@ package com.remedy.alpha.UI;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -13,6 +15,9 @@ import android.widget.EditText;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ibm.watson.developer_cloud.tone_analyzer.v3.ToneAnalyzer;
+import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneAnalysis;
+import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneOptions;
 import com.remedy.alpha.Support.ChatAdapter;
 import com.remedy.alpha.R;
 import com.remedy.alpha.Support.Utils;
@@ -37,6 +42,7 @@ import allbegray.slack.webapi.method.chats.ChatPostMessageMethod;
 import com.remedy.alpha.model.RemedyMessage;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ChatActivity extends AppCompatActivity {
@@ -60,6 +66,7 @@ public class ChatActivity extends AppCompatActivity {
     private String type;
 
     private int analysisCounter;
+    private boolean firstEntry = true;
 
     @Override
 
@@ -78,6 +85,66 @@ public class ChatActivity extends AppCompatActivity {
             moveTaskToBack(true);
 
         configureUI();
+
+        //IBM Sentiment Analysis
+        ToneAnalyzer service = new ToneAnalyzer("2017-09-21");
+        service.setUsernameAndPassword("3d35e35a-6ade-4659-961a-a0a39bb34340", "vin2ozD8qTtT");
+        String text = "I know the times are difficult! Our sales have been "
+                + "disappointing for the past three quarters for our data analytics "
+                + "product suite. We have a competitive data analytics product "
+                + "suite in the industry. But we need to do our job selling it! "
+                + "We need to acknowledge and fix our sales challenges. "
+                + "We can’t blame the economy for our lack of execution! " + "We are missing critical sales opportunities. "
+                + "Our product is in no way inferior to the competitor products. "
+                + "Our clients are hungry for analytical tools to improve their "
+                + "business outcomes. Economy has nothing to do with it.";
+    }
+
+    private class SentimentAnalysis extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... textToAnalyze) {
+            ToneAnalyzer service = new ToneAnalyzer("2017-09-21");
+            service.setUsernameAndPassword("3d35e35a-6ade-4659-961a-a0a39bb34340", "vin2ozD8qTtT");
+
+            ToneOptions toneOptions = new ToneOptions.Builder()
+                    .text(textToAnalyze[0])
+                    .build();
+            ToneAnalysis tone = service.tone(toneOptions).execute();
+
+            return tone.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            //Log.d("wxh", response);
+
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                if(jsonObject.has("document_tone")){
+                    JSONObject data = jsonObject.getJSONObject("document_tone");
+                    if(data.has("tones")){
+                        JSONArray jsonArray = data.getJSONArray("tones");
+                        JSONObject firstElement = jsonArray.getJSONObject(0);
+                        if(firstElement.has("score") && firstElement.has("tone_name")){
+                            String type = firstElement.getString("tone_name");
+                            Double score = firstElement.getDouble("score");
+                            Log.d("wxh", type + " score: " + String.valueOf(score));
+                        }
+
+                        JSONObject secondElement = jsonArray.getJSONObject(1);
+                        if(secondElement.has("score") && secondElement.has("tone_name")){
+                            String type = secondElement.getString("tone_name");
+                            Double score = secondElement.getDouble("score");
+                            Log.d("wxh", type + " score: " + String.valueOf(score));
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     private void callProtocol(){
@@ -202,8 +269,7 @@ public class ChatActivity extends AppCompatActivity {
         channelHistory = new LinkedList<>();
 
         Thread thread = new Thread() {
-            JSONObject analysisInput = new JSONObject();
-            JSONArray array = new JSONArray();
+            List<String> input = new LinkedList<>();
 
             @Override
             public void run() {
@@ -211,10 +277,7 @@ public class ChatActivity extends AppCompatActivity {
                     JsonNode retNode = Utils.execute(history);
                     String start = retNode.toString();
                     final JsonNode arrNode = new ObjectMapper().readTree(start).get("messages");
-                    analysisCounter ++;
                     if (arrNode.isArray()) {
-
-                        int msgCounter = 0;
 
                         for (final JsonNode objNode : arrNode) {
                             RemedyMessage message = new RemedyMessage();
@@ -233,20 +296,19 @@ public class ChatActivity extends AppCompatActivity {
                             message.setSendDate(new Date( (long) (objNode.findPath("ts").asInt()) * 1000));
                             channelHistory.add(message);
 
-                            if(sentByCustomer && !text.contains("Call me with command:")){
-                                JSONObject obj = new JSONObject();
-                                obj.put(String.valueOf(msgCounter), text);
-                                array.put(obj);
-
-                                msgCounter ++;
+                            if(firstEntry &&
+                                    sentByCustomer &&
+                                    !text.contains("Call me with command:") &&
+                                    !text.contains("Current customer satisfaction index:")){
+                                input.add(text);
                             }
                         }
 
-                        if(analysisCounter == 5) {
-                            analysisInput.put("texts", array);
-                            System.out.println("### " + analysisInput);
-                            //TODO GRAB THE JSON FILE HERE
-                            analysisCounter = 0;
+                        if(firstEntry) {
+                            // Call the service and get the tone
+                            String[] inputArr = new String[input.size()];
+                            new ChatActivity.SentimentAnalysis().execute(input.toArray(inputArr));
+                            firstEntry = false;
                         }
                     }
                     Collections.reverse(channelHistory);

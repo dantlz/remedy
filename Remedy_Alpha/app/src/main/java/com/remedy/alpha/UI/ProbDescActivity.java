@@ -53,21 +53,6 @@ public class ProbDescActivity extends AppCompatActivity {
 
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
 
-        //IBM Sentiment Analysis
-        ToneAnalyzer service = new ToneAnalyzer("2017-09-21");
-        service.setUsernameAndPassword("3d35e35a-6ade-4659-961a-a0a39bb34340", "vin2ozD8qTtT");
-        String text = "I know the times are difficult! Our sales have been "
-                + "disappointing for the past three quarters for our data analytics "
-                + "product suite. We have a competitive data analytics product "
-                + "suite in the industry. But we need to do our job selling it! "
-                + "We need to acknowledge and fix our sales challenges. "
-                + "We can’t blame the economy for our lack of execution! " + "We are missing critical sales opportunities. "
-                + "Our product is in no way inferior to the competitor products. "
-                + "Our clients are hungry for analytical tools to improve their "
-                + "business outcomes. Economy has nothing to do with it.";
-
-        // Call the service and get the tone
-        new SentimentAnalysis().execute(new String[]{text});
     }
 
     private void AttachListeners(){
@@ -94,53 +79,6 @@ public class ProbDescActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    private class SentimentAnalysis extends AsyncTask<String, Void, String>{
-
-        @Override
-        protected String doInBackground(String... textToAnalyze) {
-            ToneAnalyzer service = new ToneAnalyzer("2017-09-21");
-            service.setUsernameAndPassword("3d35e35a-6ade-4659-961a-a0a39bb34340", "vin2ozD8qTtT");
-
-            ToneOptions toneOptions = new ToneOptions.Builder()
-                    .text(textToAnalyze[0])
-                    .build();
-            ToneAnalysis tone = service.tone(toneOptions).execute();
-
-            return tone.toString();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            //Log.d("wxh", response);
-
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-                if(jsonObject.has("document_tone")){
-                    JSONObject data = jsonObject.getJSONObject("document_tone");
-                    if(data.has("tones")){
-                        JSONArray jsonArray = data.getJSONArray("tones");
-                        JSONObject firstElement = jsonArray.getJSONObject(0);
-                        if(firstElement.has("score") && firstElement.has("tone_name")){
-                            String type = firstElement.getString("tone_name");
-                            Double score = firstElement.getDouble("score");
-                            Log.d("wxh", type + " score: " + String.valueOf(score));
-                        }
-
-                        JSONObject secondElement = jsonArray.getJSONObject(1);
-                        if(secondElement.has("score") && secondElement.has("tone_name")){
-                            String type = secondElement.getString("tone_name");
-                            Double score = secondElement.getDouble("score");
-                            Log.d("wxh", type + " score: " + String.valueOf(score));
-                        }
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
     }
 
 }
