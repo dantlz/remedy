@@ -12,8 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".UI.ProbDescActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".UI.ProbDescActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,17 +20,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UI.ContactTypeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".UI.ContactTypeActivity" />
         <activity
-            android:name=".UI.ContactInfoActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".UI.ContactInfoActivity" />
         <activity
-            android:name=".UI.QueueActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".UI.QueueActivity" />
         <activity
-            android:name=".UI.ChatActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".UI.ChatActivity" />
+        <activity android:name=".UI.MainActivity"></activity>
     </application>
 
 </manifest>

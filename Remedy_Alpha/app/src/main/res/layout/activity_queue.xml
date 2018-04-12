@@ -6,22 +6,27 @@
     android:layout_height="match_parent"
     tools:context="com.remedy.alpha.UI.QueueActivity">
 
-    <ImageView
-        android:id="@+id/chatQueueHeaderBGImageView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@drawable/chat_queue_bg"
-        android:contentDescription="@string/chat_queue_bg_img"
-        android:scaleType="centerCrop" />
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="90dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chatQueueHeaderBGImageView"
-        app:srcCompat="@drawable/chat_queue_ph" />
+        <ImageView
+            android:id="@+id/chatQueueHeaderBGImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/fixed_chat_queue_bg"
+            android:contentDescription="@string/chat_queue_bg_img"
+            android:scaleType="fitCenter" />
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/loading_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            app:indicatorName="BallPulseIndicator"
+            />
+
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

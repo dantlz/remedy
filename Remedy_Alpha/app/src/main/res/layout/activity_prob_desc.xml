@@ -15,85 +15,54 @@
         <ImageView
             android:id="@+id/probHeaderBGImageView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/prob_desc_bg"
+            android:layout_height="match_parent"
+            android:background="@drawable/fixed_prob_desc_bg"
             android:contentDescription="@string/prob_desc_bg_img"
-            android:scaleType="centerCrop" />
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/descTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_marginTop="130dp"
             android:fontFamily="@font/roboto_condensed_bold"
             android:text="@string/desc_text_view"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@android:color/white"
             android:textSize="30sp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/descTextView"
+            android:layout_marginTop="230dp">
+
+            <Spinner
+                android:id="@+id/probDescSpinner"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="100dp"
+                android:background="@drawable/spinner_bg" />
+
+            <Button
+                android:id="@+id/enterButton"
+                android:layout_width="140dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="60dp"
+                android:background="@drawable/round_button_bg"
+                android:fontFamily="@font/roboto_condensed_bold"
+                android:text="@string/enter_button"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:typeface="normal" />
+
+        </LinearLayout>
+
     </RelativeLayout>
-
-    <Spinner
-        android:id="@+id/probDescSpinner"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="55dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="100dp"
-        android:background="@drawable/spinner_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/probHeaderRelativeLayout" />
-
-    <Button
-        android:id="@+id/enterButton"
-        android:layout_width="140dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="135dp"
-        android:layout_marginStart="135dp"
-        android:layout_marginTop="100dp"
-        android:background="@drawable/round_button_bg"
-        android:fontFamily="@font/roboto"
-        android:text="@string/enter_button"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:typeface="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/probDescSpinner" />
-
-    <RadioGroup
-        android:id="@+id/probPageRadioGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:layout_marginEnd="132dp"
-        android:layout_marginStart="132dp"
-        android:checkedButton="@+id/pageOneRadioButton"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <RadioButton
-            android:id="@+id/probPageOneRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true" />
-
-        <RadioButton
-            android:id="@+id/probPageTwoRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false" />
-
-        <RadioButton
-            android:id="@+id/probPageThreeRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </RadioGroup>
 
 </android.support.constraint.ConstraintLayout>

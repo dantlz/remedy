@@ -9,22 +9,22 @@
     <RelativeLayout
         android:id="@+id/contactInfoHeaderRelativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/contactHeaderBGImageView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/contact_info_bg"
+            android:layout_height="match_parent"
+            android:background="@drawable/fixed_contact_info_bg"
             android:contentDescription="@string/contact_info_bg_img"
-            android:scaleType="centerCrop" />
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/contactInfoTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_marginTop="130dp"
             android:fontFamily="@font/roboto_condensed_bold"
             android:text="@string/contact_info_text_view"
             android:textAlignment="center"
@@ -32,118 +32,78 @@
             android:textColor="@android:color/white"
             android:textSize="30sp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="230dp">
+
+            <EditText
+                android:id="@+id/nameEditText"
+                android:background="@drawable/spinner_bg"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="50dp"
+                android:ems="10"
+                android:hint="John Appleseed"
+                android:inputType="textPersonName"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/phoneEditText"
+                android:background="@drawable/spinner_bg"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="4157698936"
+                android:inputType="phone"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/notesEditText"
+                android:gravity="top"
+                android:background="@drawable/spinner_bg"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_width="300dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:hint="@string/notes_edit_text_hint"
+                android:inputType="textMultiLine"
+                android:isScrollContainer="true"
+                android:minLines="5"
+                android:maxLines="5" />
+
+            <Button
+                android:id="@+id/doneButton"
+                android:layout_width="140dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="80dp"
+                android:background="@drawable/round_button_bg"
+                android:text="@string/done_button"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:typeface="normal" />
+
+        </LinearLayout>
+
     </RelativeLayout>
-
-    <EditText
-        android:id="@+id/nameEditText"
-        android:background="@drawable/spinner_bg"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="55dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="31dp"
-        android:ems="10"
-        android:hint="John Appleseed"
-        android:inputType="textPersonName"
-        android:singleLine="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/contactInfoHeaderRelativeLayout" />
-
-    <EditText
-        android:id="@+id/phoneEditText"
-        android:background="@drawable/spinner_bg"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="55dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="4157698936"
-        android:inputType="phone"
-        android:singleLine="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
-
-    <EditText
-        android:id="@+id/notesEditText"
-        android:gravity="top"
-        android:background="@drawable/spinner_bg"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_width="300dp"
-        android:layout_height="130dp"
-        android:layout_marginEnd="55dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="@string/notes_edit_text_hint"
-        android:inputType="textMultiLine"
-        android:isScrollContainer="true"
-        android:minLines="5"
-        android:maxLines="5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phoneEditText" />
-
-    <Button
-        android:id="@+id/doneButton"
-        android:layout_width="140dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="135dp"
-        android:layout_marginStart="135dp"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/round_button_bg"
-        android:text="@string/done_button"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:typeface="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notesEditText" />
-
-    <RadioGroup
-        android:id="@+id/contactInfoPageRadioGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:layout_marginEnd="132dp"
-        android:layout_marginStart="132dp"
-        android:checkedButton="@+id/contactInfoPageThreeRadioButton"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <RadioButton
-            android:id="@+id/contactInfoPageOneRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false" />
-
-        <RadioButton
-            android:id="@+id/contactInfoPageTwoRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false" />
-
-        <RadioButton
-            android:id="@+id/contactInfoPageThreeRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </RadioGroup>
 
 </android.support.constraint.ConstraintLayout>

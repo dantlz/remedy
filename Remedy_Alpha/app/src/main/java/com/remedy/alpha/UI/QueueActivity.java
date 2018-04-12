@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.remedy.alpha.R;
+import com.wang.avi.AVLoadingIndicatorView;
 
 public class QueueActivity extends AppCompatActivity {
 
@@ -13,6 +14,8 @@ public class QueueActivity extends AppCompatActivity {
     private String phoneNumber;
     private String notes;
     private String type;
+
+    private AVLoadingIndicatorView avi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,8 @@ public class QueueActivity extends AppCompatActivity {
         phoneNumber = getIntent().getStringExtra("PHONE");
         notes = getIntent().getStringExtra("NOTES");
         type = getIntent().getStringExtra("TYPE");
+
+        avi = (AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
 
 
         Handler handler = new Handler();
@@ -43,10 +48,17 @@ public class QueueActivity extends AppCompatActivity {
             }
         };
         if (type.equals("CHAT"))
+            startAnim();
             handler.postDelayed(response, 3000);
         if(type.equals("CALL")) {
+            startAnim();
             response.run();
         }
+    }
+
+    void startAnim(){
+        avi.show();
+        // or avi.smoothToShow();
     }
 
     //TODO Move connections here
