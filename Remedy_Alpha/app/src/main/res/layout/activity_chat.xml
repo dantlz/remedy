@@ -52,12 +52,13 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="30dp"
-            android:maxLines="6"/>
+            android:maxLines="6"
+            android:textSize="18sp"/>
 
         <Button
             android:id="@+id/button_chatbox_send"
             android:text="SEND"
-            android:textSize="14dp"
+            android:textSize="18sp"
             android:clickable="true"
             android:layout_width="64dp"
             android:layout_height="48dp"
