@@ -29,6 +29,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'com.github.pschroen:slack-api-android:c66cc8d997'
     compile 'com.google.firebase:firebase-core:11.8.0'
+    compile 'com.ibm.watson.developer_cloud:java-sdk:5.2.0'
 
     compile('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
         transitive = true
