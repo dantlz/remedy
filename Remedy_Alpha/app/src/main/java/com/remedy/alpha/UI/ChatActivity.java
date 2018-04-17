@@ -89,15 +89,6 @@ public class ChatActivity extends AppCompatActivity {
         //IBM Sentiment Analysis
         ToneAnalyzer service = new ToneAnalyzer("2017-09-21");
         service.setUsernameAndPassword("3d35e35a-6ade-4659-961a-a0a39bb34340", "vin2ozD8qTtT");
-        String text = "I know the times are difficult! Our sales have been "
-                + "disappointing for the past three quarters for our data analytics "
-                + "product suite. We have a competitive data analytics product "
-                + "suite in the industry. But we need to do our job selling it! "
-                + "We need to acknowledge and fix our sales challenges. "
-                + "We can’t blame the economy for our lack of execution! " + "We are missing critical sales opportunities. "
-                + "Our product is in no way inferior to the competitor products. "
-                + "Our clients are hungry for analytical tools to improve their "
-                + "business outcomes. Economy has nothing to do with it.";
     }
 
     private class SentimentAnalysis extends AsyncTask<String, Void, String> {
@@ -269,8 +260,7 @@ public class ChatActivity extends AppCompatActivity {
         channelHistory = new LinkedList<>();
 
         Thread thread = new Thread() {
-            List<String> input = new LinkedList<>();
-
+        String input = "";
             @Override
             public void run() {
                 try {
@@ -300,14 +290,13 @@ public class ChatActivity extends AppCompatActivity {
                                     sentByCustomer &&
                                     !text.contains("Call me with command:") &&
                                     !text.contains("Current customer satisfaction index:")){
-                                input.add(text);
+                                input = input + (text) + " ";
                             }
                         }
 
                         if(firstEntry) {
                             // Call the service and get the tone
-                            String[] inputArr = new String[input.size()];
-                            new ChatActivity.SentimentAnalysis().execute(input.toArray(inputArr));
+                            new SentimentAnalysis().execute(new String[]{input});
                             firstEntry = false;
                         }
                     }

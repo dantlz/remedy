@@ -9,12 +9,12 @@
     <RelativeLayout
         android:id="@+id/contactHeaderRelativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/contactHeaderBGImageView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="match_parent"
             android:background="@drawable/contact_bg"
             android:contentDescription="@string/contact_bg_img"
             android:scaleType="centerCrop" />
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_marginTop="130dp"
             android:fontFamily="@font/roboto_condensed_bold"
             android:text="@string/contact_text_view"
             android:textAlignment="center"
@@ -32,74 +32,42 @@
             android:textColor="@android:color/white"
             android:textSize="30sp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="230dp">
+
+            <Button
+                android:id="@+id/callButton"
+                android:layout_width="140dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="160dp"
+                android:background="@drawable/round_button_bg"
+                android:fontFamily="@font/roboto_condensed_bold"
+                android:text="@string/call_button"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:typeface="normal" />
+
+            <Button
+                android:id="@+id/chatButton"
+                android:layout_width="140dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/round_button_bg"
+                android:fontFamily="@font/roboto_condensed_bold"
+                android:text="@string/chat_button"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:typeface="normal" />
+
+        </LinearLayout>
+
     </RelativeLayout>
-
-    <Button
-        android:id="@+id/callButton"
-        android:layout_width="140dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="135dp"
-        android:layout_marginStart="135dp"
-        android:layout_marginTop="140dp"
-        android:background="@drawable/round_button_bg"
-        android:fontFamily="@font/roboto"
-        android:text="@string/call_button"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:typeface="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/contactHeaderRelativeLayout" />
-
-    <Button
-        android:id="@+id/chatButton"
-        android:layout_width="140dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="135dp"
-        android:layout_marginStart="135dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/round_button_bg"
-        android:fontFamily="@font/roboto"
-        android:text="@string/chat_button"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:typeface="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/callButton" />
-
-    <RadioGroup
-        android:id="@+id/contactPageRadioGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:layout_marginEnd="132dp"
-        android:layout_marginStart="132dp"
-        android:checkedButton="@+id/contactPageTwoRadioButton"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <RadioButton
-            android:id="@+id/contactPageOneRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false" />
-
-        <RadioButton
-            android:id="@+id/contactPageTwoRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false" />
-
-        <RadioButton
-            android:id="@+id/contactPageThreeRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </RadioGroup>
 
 </android.support.constraint.ConstraintLayout>
