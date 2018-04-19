@@ -65,6 +65,7 @@ public class ProbDescActivity extends AppCompatActivity {
                     System.out.println(selectedOption);
                     Intent intent = new Intent(ProbDescActivity.this, ContactTypeActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 }
             }
         });
@@ -81,5 +82,10 @@ public class ProbDescActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+    }
 }
 

@@ -83,7 +83,14 @@ public class ContactInfoActivity extends AppCompatActivity {
                 intent.putExtra("NOTES", notes);
 
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }
 }

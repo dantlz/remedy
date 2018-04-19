@@ -28,7 +28,7 @@
             android:name=".UI.QueueActivity" />
         <activity
             android:name=".UI.ChatActivity" />
-        <activity android:name=".UI.MainActivity"></activity>
+        <activity android:name=".UI.HelpPagerActivity"></activity>
     </application>
 
 </manifest>

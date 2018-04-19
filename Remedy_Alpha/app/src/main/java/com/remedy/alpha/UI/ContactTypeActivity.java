@@ -32,6 +32,7 @@ public class ContactTypeActivity extends AppCompatActivity {
                 Intent intent = new Intent(ContactTypeActivity.this, ContactInfoActivity.class);
                 intent.putExtra("TYPE", "CALL");
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }
         });
         chatButton.setOnClickListener(new View.OnClickListener() {
@@ -40,7 +41,14 @@ public class ContactTypeActivity extends AppCompatActivity {
                 Intent intent = new Intent(ContactTypeActivity.this, ContactInfoActivity.class);
                 intent.putExtra("TYPE", "CHAT");
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }
 }
