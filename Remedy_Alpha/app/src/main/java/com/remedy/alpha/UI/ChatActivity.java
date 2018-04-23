@@ -108,7 +108,7 @@ public class ChatActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            Log.d("wxh", response);
+//            Log.d("wxh", response);
 
             try {
                 JSONObject jsonObject = new JSONObject(response);
@@ -120,10 +120,10 @@ public class ChatActivity extends AppCompatActivity {
                         if(firstElement.has("score") && firstElement.has("tone_name")){
                             String type = firstElement.getString("tone_name");
                             Double score = firstElement.getDouble("score");
-                            Log.d("wxh", type + " score: " + String.valueOf(score));
+//                            Log.d("wxh", type + " score: " + String.valueOf(score));
 
-                            String result = "This customer has " + type + "score of: " + String.valueOf(score);
-                            Log.d("wxh", result);
+                            String result = "This customer has " + type + " score of: " + String.valueOf(score);
+//                            Log.d("wxh", result);
 
                             //post the message to the agent
                             Utils.createRemedyMessage(null, currID, true, Calendar.getInstance().getTime());
@@ -363,6 +363,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void messageHandler_Message(JsonNode message) {
+        System.out.println("###### HIIIIIIITTTT ");
+
         if (type.equals("CHAT")){
 
         }

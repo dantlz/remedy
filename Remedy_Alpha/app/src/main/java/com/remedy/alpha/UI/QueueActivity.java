@@ -30,29 +30,25 @@ public class QueueActivity extends AppCompatActivity {
         avi = (AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
 
 
-        Handler handler = new Handler();
-        Runnable response =  new Runnable() {
-            public void run() {
-
-                Intent intent;
-                intent = new Intent(QueueActivity.this, ChatActivity.class);
-
-                intent.putExtra("TYPE", type);
-                intent.putExtra("NAME", name);
-                intent.putExtra("PHONE", phoneNumber);
-                intent.putExtra("NOTES", notes);
-//                if (type.equals("CALL"))
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-
-//                startActivity(intent);
-            }
-        };
         if (type.equals("CHAT"))
             startAnim();
+            Handler handler = new Handler();
+            Runnable response =  new Runnable() {
+                public void run() {
+
+                    Intent intent;
+                    intent = new Intent(QueueActivity.this, ChatActivity.class);
+
+                    intent.putExtra("TYPE", type);
+                    intent.putExtra("NAME", name);
+                    intent.putExtra("PHONE", phoneNumber);
+                    intent.putExtra("NOTES", notes);
+                    startActivity(intent);
+                }
+            };
             handler.postDelayed(response, 3000);
         if(type.equals("CALL")) {
             startAnim();
-            response.run();
         }
     }
 
