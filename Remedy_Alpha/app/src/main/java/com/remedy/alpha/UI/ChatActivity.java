@@ -108,7 +108,7 @@ public class ChatActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            //Log.d("wxh", response);
+            Log.d("wxh", response);
 
             try {
                 JSONObject jsonObject = new JSONObject(response);
@@ -121,13 +121,28 @@ public class ChatActivity extends AppCompatActivity {
                             String type = firstElement.getString("tone_name");
                             Double score = firstElement.getDouble("score");
                             Log.d("wxh", type + " score: " + String.valueOf(score));
-                        }
 
-                        JSONObject secondElement = jsonArray.getJSONObject(1);
-                        if(secondElement.has("score") && secondElement.has("tone_name")){
-                            String type = secondElement.getString("tone_name");
-                            Double score = secondElement.getDouble("score");
-                            Log.d("wxh", type + " score: " + String.valueOf(score));
+                            String result = "This customer has " + type + "score of: " + String.valueOf(score);
+                            Log.d("wxh", result);
+
+                            //post the message to the agent
+                            Utils.createRemedyMessage(null, currID, true, Calendar.getInstance().getTime());
+                            final ChatPostMessageMethod message = new ChatPostMessageMethod(currChannelName, result);
+                            message.setUsername(currUsername);
+                            Thread thread = new Thread() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        mWebApiClient.postMessage(message);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            };
+                            thread.start();
+
+
+
                         }
                     }
                 }
