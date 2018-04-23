@@ -5,8 +5,19 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.remedy.alpha.R;
+import com.remedy.alpha.Support.Utils;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import allbegray.slack.SlackClientFactory;
+import allbegray.slack.rtm.Event;
+import allbegray.slack.rtm.EventListener;
+import allbegray.slack.rtm.SlackRealTimeMessagingClient;
+import allbegray.slack.type.Authentication;
+import allbegray.slack.webapi.method.SlackMethod;
+import allbegray.slack.webapi.method.channels.ChannelJoinMethod;
+import allbegray.slack.webapi.method.chats.ChatPostMessageMethod;
 
 public class QueueActivity extends AppCompatActivity {
 
@@ -28,39 +39,125 @@ public class QueueActivity extends AppCompatActivity {
         type = getIntent().getStringExtra("TYPE");
 
         avi = findViewById(R.id.loading_indicator);
-
-
-
-        if (type.equals("CHAT"))
-            startAnim();
-            Handler handler = new Handler();
-            Runnable response =  new Runnable() {
-                public void run() {
-
-                    Intent intent;
-                    intent = new Intent(QueueActivity.this, ChatActivity.class);
-
-                    intent.putExtra("TYPE", type);
-                    intent.putExtra("NAME", name);
-                    intent.putExtra("PHONE", phoneNumber);
-                    intent.putExtra("NOTES", notes);
-                    startActivity(intent);
-                }
-            };
-            handler.postDelayed(response, 3000);
-        if(type.equals("CALL")) {
-            startAnim();
-        }
-    }
-
-    void startAnim(){
         avi.show();
-        // or avi.smoothToShow();
+
+        openConnection();
+
+
+//        if (type.equals("CHAT"))
+//            avi.show(); //avi.smoothToShow();
+//            Handler handler = new Handler();
+//            Runnable response =  new Runnable() {
+//                public void run() {
+//
+//                }
+//            };
+//            handler.postDelayed(response, 3000);
+//        if(type.equals("CALL")) {
+//            avi.show(); //avi.smoothToShow();
+//        }
+
     }
 
+    private void openConnection() {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    //TODO Create local reading of token
 
+                    Utils.mWebApiClient = SlackClientFactory.createWebApiClient(Utils.Danny2_slackToken);
+                    String webSocketUrl = Utils.mWebApiClient.startRealTimeMessagingApi().findPath("url").asText();
+                    Utils.mRtmClient = new SlackRealTimeMessagingClient(webSocketUrl);
+                    Utils.mRtmClient.addListener(Event.HELLO, new EventListener() {
+                        @Override
+                        public void onMessage(JsonNode message) {
+                            messageHandler_Initialization(message);
+                        }
+                    });
+                    Utils.mRtmClient.addListener(Event.MESSAGE, new EventListener() {
+                        @Override
+                        public void onMessage(JsonNode message) {
+                            messageHandler_Message(message);
+                        }
+                    });
+                    Utils.mRtmClient.connect();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+    }
 
-    //TODO Move connections here
+    private void messageHandler_Initialization(JsonNode message) {
 
+        System.out.println("@@@ Authenticated");
 
+        Authentication authentication = Utils.mWebApiClient.auth();
+        authentication.getUser();
+        Utils.currID = authentication.getUser_id();
+        Utils.currUsername = name;
+        Utils.currChannelName = "customer_" + name + "_" + Utils.currID;
+        Utils.currChannelName = Utils.currChannelName.toLowerCase();
+
+        establishChannel();
+    }
+
+    private void establishChannel(){
+        //TODO Talk to queue channel
+        final SlackMethod joinMethod = new ChannelJoinMethod("queue"); //TODO
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    JsonNode retNode = Utils.execute(joinMethod);
+                    Utils.currChannelID = retNode.findPath("channel").findPath("id").asText();
+
+                    System.out.println("@@@ Channel established, ID: " + Utils.currChannelID);
+
+                    if(type.equals("CALL")) {
+                        //TODO Send a message to add myself to queue
+                        final String text = "Call me with command: \n@phonebot call +1" + phoneNumber;
+                        Utils.postMessage(Utils.currChannelName, Utils.currUsername, text);
+                    }
+
+                    //TODO Keep sending a message til we get a ready
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+
+        //Can only configure here since we need to get channelID before getting history
+    }
+
+    private void messageHandler_Message(JsonNode message) {
+        System.out.println("###### " + message);
+
+        if(message.get("text").asText().equals("ready")){
+            System.out.println("###### " + message);
+
+            if (type.equals("CHAT")){
+                System.out.println("###### " + message);
+
+                Intent intent;
+                intent = new Intent(QueueActivity.this, ChatActivity.class);
+
+                intent.putExtra("TYPE", type);
+                intent.putExtra("NAME", name);
+                intent.putExtra("PHONE", phoneNumber);
+                intent.putExtra("NOTES", notes);
+                startActivity(intent);
+            }
+            else{
+                System.out.println("@@@@@@@@ " + message);
+
+                //TODO Display something saying someone will call you ASAP
+            }
+        }
+        //TODO else if check for queue reduction
+    }
 }

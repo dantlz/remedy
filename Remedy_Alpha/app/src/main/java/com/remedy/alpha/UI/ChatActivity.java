@@ -45,12 +45,9 @@ import org.json.JSONObject;
 public class ChatActivity extends AppCompatActivity {
     private RecyclerView mMessageRecycler;
     private ChatAdapter mMessageAdapter;
-    private String currID;
-    private String currUsername;
+
     private Button sendButton;
     private EditText messageEditText;
-    private String currChannelName;
-    private String currChannelID;
     private List<RemedyMessage> channelHistory;
 
     private String name;
@@ -58,7 +55,6 @@ public class ChatActivity extends AppCompatActivity {
     private String notes;
     private String type;
 
-    private int analysisCounter;
     private boolean firstEntry = true;
 
     @Override
@@ -72,16 +68,43 @@ public class ChatActivity extends AppCompatActivity {
         notes = getIntent().getStringExtra("NOTES");
         type = getIntent().getStringExtra("TYPE");
 
-        openConnection();
 
-//        if(type.equals("CALL"))
-//            moveTaskToBack(true);
+        Utils.mRtmClient.addListener(Event.MESSAGE, new EventListener() {
+            @Override
+            public void onMessage(JsonNode message) {
+                getChannelHistory();
+            }
+        });
 
         configureUI();
+        getChannelHistory();
 
         //IBM Sentiment Analysis
         ToneAnalyzer service = new ToneAnalyzer("2017-09-21");
         service.setUsernameAndPassword("3d35e35a-6ade-4659-961a-a0a39bb34340", "vin2ozD8qTtT");
+    }
+
+    private void configureUI() {
+        messageEditText = findViewById(R.id.edittext_chatbox);
+        sendButton = findViewById(R.id.button_chatbox_send);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.postMessage(Utils.currChannelName, Utils.currUsername, messageEditText.getText().toString());
+                messageEditText.setText("");
+                View curr = getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            }
+        });
+
+        mMessageRecycler = (RecyclerView) findViewById(R.id.reyclerview_message_list);
+        channelHistory = new LinkedList<RemedyMessage>();
+        mMessageAdapter = new ChatAdapter(this, channelHistory);
+        mMessageRecycler.setAdapter(mMessageAdapter);
+        mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private class SentimentAnalysis extends AsyncTask<String, Void, String> {
@@ -119,23 +142,7 @@ public class ChatActivity extends AppCompatActivity {
 //                            Log.d("wxh", result);
 
                             //post the message to the agent
-                            Utils.createRemedyMessage(null, currID, true, Calendar.getInstance().getTime());
-                            final ChatPostMessageMethod message = new ChatPostMessageMethod(currChannelName, result);
-                            message.setUsername(currUsername);
-                            Thread thread = new Thread() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        Utils.mWebApiClient.postMessage(message);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            };
-                            thread.start();
-
-
-
+                            Utils.postMessage(Utils.currChannelName, Utils.currUsername, result);
                         }
                     }
                 }
@@ -146,125 +153,8 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private void callProtocol(){
-        final String text = "Call me with command: \n@phonebot call +1" + phoneNumber;
-        final ChatPostMessageMethod message = new ChatPostMessageMethod(currChannelName, text);
-        message.setUsername(currUsername);
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    System.out.println("@@@ " + text);
-                    Utils.mWebApiClient.postMessage(message);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        thread.start();
-
-        Intent intent = new Intent(ChatActivity.this, QueueActivity.class);
-        intent.putExtra("TYPE", "STOP");
-        intent.putExtra("NAME", name);
-        intent.putExtra("PHONE", phoneNumber);
-        intent.putExtra("NOTES", notes);
-        startActivity(intent);
-    }
-
-    private void configureUI() {
-        messageEditText = findViewById(R.id.edittext_chatbox);
-        sendButton = findViewById(R.id.button_chatbox_send);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendMessageFromInputBox();
-                messageEditText.setText("");
-                View curr = getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
-            }
-        });
-
-        mMessageRecycler = (RecyclerView) findViewById(R.id.reyclerview_message_list);
-        channelHistory = new LinkedList<RemedyMessage>();
-        mMessageAdapter = new ChatAdapter(this, channelHistory);
-        mMessageRecycler.setAdapter(mMessageAdapter);
-        mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    private void openConnection() {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    //TODO Create local reading of token
-
-                    Utils.mWebApiClient = SlackClientFactory.createWebApiClient(Utils.Danny2_slackToken);
-                    String webSocketUrl = Utils.mWebApiClient.startRealTimeMessagingApi().findPath("url").asText();
-                    Utils.mRtmClient = new SlackRealTimeMessagingClient(webSocketUrl);
-                    Utils.mRtmClient.addListener(Event.HELLO, new EventListener() {
-                        @Override
-                        public void onMessage(JsonNode message) {
-                            messageHandler_Initialization(message);
-                        }
-                    });
-                    Utils.mRtmClient.addListener(Event.MESSAGE, new EventListener() {
-                        @Override
-                        public void onMessage(JsonNode message) {
-                            messageHandler_Message(message);
-                        }
-                    });
-                    Utils.mRtmClient.connect();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        thread.start();
-    }
-
-    private void messageHandler_Initialization(JsonNode message) {
-        System.out.println("@@@ Initialized: " + message);
-
-        Authentication authentication = Utils.mWebApiClient.auth();
-        authentication.getUser();
-        currID = authentication.getUser_id();
-        currUsername = name;
-        currChannelName = "customer_" + name + "_" + currID;
-        currChannelName = currChannelName.toLowerCase();
-//        currUsername = message.findPath("user").asText();
-        establishChannel();
-    }
-
-    //Create a new channel if it doesn't exist
-    private void establishChannel(){
-        final SlackMethod joinMethod = new ChannelJoinMethod(currChannelName);
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    JsonNode retNode = Utils.execute(joinMethod);
-                    currChannelID = retNode.findPath("channel").findPath("id").asText();
-                    System.out.println("@@@ Channel established, ID: " + currChannelID);
-                    if (type.equals("CHAT"))
-                        getChannelHistory();
-                    else
-                        callProtocol();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        thread.start();
-
-        //Can only configure here since we need to get channelID before getting history
-    }
-
-
     private List<RemedyMessage> getChannelHistory(){
-        final ChannelHistoryMethod history = new ChannelHistoryMethod(currChannelID);
+        final ChannelHistoryMethod history = new ChannelHistoryMethod(Utils.currChannelID);
         channelHistory = new LinkedList<>();
 
         Thread thread = new Thread() {
@@ -280,8 +170,8 @@ public class ChatActivity extends AppCompatActivity {
                         for (final JsonNode objNode : arrNode) {
                             RemedyMessage message = new RemedyMessage();
                             String user = objNode.findPath("user").asText();
-                            boolean sentByCustomer = (user.equals("")) ? true : false;
-                            if((!user.equals("")) && currID.equals(user))
+                            boolean sentByCustomer = user.equals("");
+                            if((!user.equals("")) && Utils.currID.equals(user))
                                 sentByCustomer = true;
                             message.setSentByCustomer(sentByCustomer);
                             if(sentByCustomer)
@@ -290,6 +180,11 @@ public class ChatActivity extends AppCompatActivity {
                                 message.setAgentID("Agent: " + user);
                             //TODO Retrieve agent name from agentID
                             String text = objNode.findPath("text").asText();
+
+
+                            System.out.println("^^^^^^^^^^^ " + text); //TODO
+
+
                             message.setMessage(text);
                             message.setSendDate(new Date( (long) (objNode.findPath("ts").asInt()) * 1000));
                             if(text.contains("Call me with command:") ||
@@ -340,86 +235,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
         return null;
-    }
-
-    private void sendMessageFromInputBox() {
-        Utils.createRemedyMessage(null, currID, true, Calendar.getInstance().getTime());
-        final ChatPostMessageMethod message = new ChatPostMessageMethod(currChannelName, messageEditText.getText().toString());
-        message.setUsername(currUsername);
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    Utils.mWebApiClient.postMessage(message);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        thread.start();
-    }
-
-    private void messageHandler_Message(JsonNode message) {
-        System.out.println("###### HIIIIIIITTTT ");
-
-        if (type.equals("CHAT")){
-            getChannelHistory();
-        }
-        else {
-
-        }
-        //TODO individual message population
-//        mMessageAdapter.notifyDataSetChanged();
-//
-//        //From Sean
-//        if(message.findPath("channel").asText().equals("random"))
-//            return;
-//        if(message.findPath("text").asText().contains("@phonebot") || message.findPath("bot_id").equals("B9C75Q6P6")) {
-//            return;
-//        }
-//
-//        //Grab all information from JSON
-//        String channelId = message.findPath("channel").asText();
-//        String userId = message.findPath("user").asText();
-//        String text = message.findPath("text").asText();
-//
-//        //From self
-//        if (userId == null) {
-//            return;
-//        }
-//        if (userId.equals(currID)) {
-//            return;
-//        }
-//        if (userId.equals("")) {
-//            return;
-//        }
-//
-//        //Grab all information from WebApiClient
-//        User user = mWebApiClient.getUserInfo(userId);
-//        Channel channel;
-//        try {
-//            channel = mWebApiClient.getChannelInfo(channelId);
-//        } catch (SlackResponseErrorException e) {
-//            channel = null;
-//        }
-//        String username = user.getName();
-//        String realName = user.getProfile().getReal_name();
-//
-//
-//        //Print all available info
-//        System.out.println("@@@ channelId: " + channelId);
-//        System.out.println("@@@ Channel Name: " + (channel != null ? "#" + channel.getName() : "DM"));
-//        System.out.println("@@@ userId: " + userId);
-//        System.out.println("@@@ text: " + text);
-//        System.out.println("@@@ username: " + username);
-//        System.out.println("@@@ realName: " + realName);
-//        System.out.println("@@@ userInfo: " + user);
-//
-//        //Create remedyMessage
-//        Utils.createRemedyMessage(userId, currID, false, Calendar.getInstance().getTime());
-//
-//        // Copy cat - bot duplicate messages on other people's message
-//        mWebApiClient.meMessage(channelId, userName + ": " + text);
     }
 }
 

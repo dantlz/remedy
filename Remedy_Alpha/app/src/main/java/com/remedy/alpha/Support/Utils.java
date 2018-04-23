@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import allbegray.slack.rtm.SlackRealTimeMessagingClient;
 import allbegray.slack.webapi.SlackWebApiClient;
 import allbegray.slack.webapi.SlackWebApiConstants;
 import allbegray.slack.webapi.method.SlackMethod;
+import allbegray.slack.webapi.method.chats.ChatPostMessageMethod;
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
 import com.remedy.alpha.model.RemedyMessage;
@@ -24,6 +26,11 @@ public class Utils {
     public static final String Danny2_slackToken = "";
     public static SlackRealTimeMessagingClient mRtmClient;
     public static SlackWebApiClient mWebApiClient;
+    public static String currID;
+    public static String currUsername;
+    public static String currChannelName;
+    public static String currChannelID;
+
 
     public static RemedyMessage createRemedyMessage(String agentID, String userID, boolean sentByCustomer, Date sentDate){
         RemedyMessage rMessage = new RemedyMessage();
@@ -61,5 +68,21 @@ public class Utils {
         }
 
         return retNode;
+    }
+
+    public static void postMessage(String channel, String username, String text){
+        final ChatPostMessageMethod message = new ChatPostMessageMethod("queue", text); //TODO
+        message.setUsername(username);
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    Utils.mWebApiClient.postMessage(message);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
     }
 }
