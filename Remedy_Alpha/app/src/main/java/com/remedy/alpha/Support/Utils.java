@@ -19,7 +19,7 @@ import com.remedy.alpha.model.RemedyMessage;
 
 public class Utils {
 
-    public static final String Danny2_slackToken = "";
+    public static final String Danny2_slackToken = "xoxp-303668528658-317362446608-351876088661-807a405396e3c7ed25b8df7a968ff13d";
 
     public static RemedyMessage createRemedyMessage(String agentID, String userID, boolean sentByCustomer, Date sentDate){
         RemedyMessage rMessage = new RemedyMessage();

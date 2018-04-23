@@ -81,8 +81,8 @@ public class ChatActivity extends AppCompatActivity {
 
         openConnection();
 
-        if(type.equals("CALL"))
-            moveTaskToBack(true);
+//        if(type.equals("CALL"))
+//            moveTaskToBack(true);
 
         configureUI();
 
@@ -348,7 +348,12 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void messageHandler_Message(JsonNode message) {
-        getChannelHistory();
+        if (type.equals("CHAT")){
+
+        }
+        else {
+            getChannelHistory();
+        }
         //TODO individual message population
 //        mMessageAdapter.notifyDataSetChanged();
 //

@@ -41,10 +41,10 @@ public class QueueActivity extends AppCompatActivity {
                 intent.putExtra("NAME", name);
                 intent.putExtra("PHONE", phoneNumber);
                 intent.putExtra("NOTES", notes);
-                if (type.equals("CALL"))
-                    intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+//                if (type.equals("CALL"))
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
-                startActivity(intent);
+//                startActivity(intent);
             }
         };
         if (type.equals("CHAT"))
