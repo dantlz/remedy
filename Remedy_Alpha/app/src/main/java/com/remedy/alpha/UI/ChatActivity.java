@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -25,7 +24,6 @@ import com.remedy.alpha.Support.Utils;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,7 +32,6 @@ import allbegray.slack.rtm.Event;
 import allbegray.slack.rtm.EventListener;
 import allbegray.slack.rtm.SlackRealTimeMessagingClient;
 import allbegray.slack.type.Authentication;
-import allbegray.slack.webapi.SlackWebApiClient;
 import allbegray.slack.webapi.method.SlackMethod;
 import allbegray.slack.webapi.method.channels.ChannelHistoryMethod;
 import allbegray.slack.webapi.method.channels.ChannelJoinMethod;
@@ -50,12 +47,8 @@ public class ChatActivity extends AppCompatActivity {
     private ChatAdapter mMessageAdapter;
     private String currID;
     private String currUsername;
-    private String currRealName;
     private Button sendButton;
     private EditText messageEditText;
-    private SlackRealTimeMessagingClient mRtmClient;
-    private SlackWebApiClient mWebApiClient;
-    private String token;
     private String currChannelName;
     private String currChannelID;
     private List<RemedyMessage> channelHistory;
@@ -133,7 +126,7 @@ public class ChatActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     try {
-                                        mWebApiClient.postMessage(message);
+                                        Utils.mWebApiClient.postMessage(message);
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -162,7 +155,7 @@ public class ChatActivity extends AppCompatActivity {
             public void run() {
                 try {
                     System.out.println("@@@ " + text);
-                    mWebApiClient.postMessage(message);
+                    Utils.mWebApiClient.postMessage(message);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -184,7 +177,7 @@ public class ChatActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendMessage();
+                sendMessageFromInputBox();
                 messageEditText.setText("");
                 View curr = getCurrentFocus();
                 if (view != null) {
@@ -208,22 +201,22 @@ public class ChatActivity extends AppCompatActivity {
                 try {
                     //TODO Create local reading of token
 
-                    mWebApiClient = SlackClientFactory.createWebApiClient(Utils.Danny2_slackToken);
-                    String webSocketUrl = mWebApiClient.startRealTimeMessagingApi().findPath("url").asText();
-                    mRtmClient = new SlackRealTimeMessagingClient(webSocketUrl);
-                    mRtmClient.addListener(Event.HELLO, new EventListener() {
+                    Utils.mWebApiClient = SlackClientFactory.createWebApiClient(Utils.Danny2_slackToken);
+                    String webSocketUrl = Utils.mWebApiClient.startRealTimeMessagingApi().findPath("url").asText();
+                    Utils.mRtmClient = new SlackRealTimeMessagingClient(webSocketUrl);
+                    Utils.mRtmClient.addListener(Event.HELLO, new EventListener() {
                         @Override
                         public void onMessage(JsonNode message) {
                             messageHandler_Initialization(message);
                         }
                     });
-                    mRtmClient.addListener(Event.MESSAGE, new EventListener() {
+                    Utils.mRtmClient.addListener(Event.MESSAGE, new EventListener() {
                         @Override
                         public void onMessage(JsonNode message) {
                             messageHandler_Message(message);
                         }
                     });
-                    mRtmClient.connect();
+                    Utils.mRtmClient.connect();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -235,7 +228,7 @@ public class ChatActivity extends AppCompatActivity {
     private void messageHandler_Initialization(JsonNode message) {
         System.out.println("@@@ Initialized: " + message);
 
-        Authentication authentication = mWebApiClient.auth();
+        Authentication authentication = Utils.mWebApiClient.auth();
         authentication.getUser();
         currID = authentication.getUser_id();
         currUsername = name;
@@ -299,6 +292,10 @@ public class ChatActivity extends AppCompatActivity {
                             String text = objNode.findPath("text").asText();
                             message.setMessage(text);
                             message.setSendDate(new Date( (long) (objNode.findPath("ts").asInt()) * 1000));
+                            if(text.contains("Call me with command:") ||
+                                    text.contains("This customer has"))
+                                continue;
+
                             channelHistory.add(message);
 
                             if(firstEntry &&
@@ -345,7 +342,7 @@ public class ChatActivity extends AppCompatActivity {
         return null;
     }
 
-    private void sendMessage() {
+    private void sendMessageFromInputBox() {
         Utils.createRemedyMessage(null, currID, true, Calendar.getInstance().getTime());
         final ChatPostMessageMethod message = new ChatPostMessageMethod(currChannelName, messageEditText.getText().toString());
         message.setUsername(currUsername);
@@ -353,7 +350,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    mWebApiClient.postMessage(message);
+                    Utils.mWebApiClient.postMessage(message);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -366,10 +363,10 @@ public class ChatActivity extends AppCompatActivity {
         System.out.println("###### HIIIIIIITTTT ");
 
         if (type.equals("CHAT")){
-
+            getChannelHistory();
         }
         else {
-            getChannelHistory();
+
         }
         //TODO individual message population
 //        mMessageAdapter.notifyDataSetChanged();

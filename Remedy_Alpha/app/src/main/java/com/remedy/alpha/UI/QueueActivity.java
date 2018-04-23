@@ -27,7 +27,8 @@ public class QueueActivity extends AppCompatActivity {
         notes = getIntent().getStringExtra("NOTES");
         type = getIntent().getStringExtra("TYPE");
 
-        avi = (AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
+        avi = findViewById(R.id.loading_indicator);
+
 
 
         if (type.equals("CHAT"))
@@ -56,6 +57,8 @@ public class QueueActivity extends AppCompatActivity {
         avi.show();
         // or avi.smoothToShow();
     }
+
+
 
     //TODO Move connections here
 

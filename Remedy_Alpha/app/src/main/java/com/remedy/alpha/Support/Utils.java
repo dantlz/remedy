@@ -10,6 +10,8 @@ import java.util.Map;
 import allbegray.slack.RestUtils;
 import allbegray.slack.exception.SlackException;
 import allbegray.slack.exception.SlackResponseErrorException;
+import allbegray.slack.rtm.SlackRealTimeMessagingClient;
+import allbegray.slack.webapi.SlackWebApiClient;
 import allbegray.slack.webapi.SlackWebApiConstants;
 import allbegray.slack.webapi.method.SlackMethod;
 import cz.msebera.android.httpclient.HttpEntity;
@@ -19,7 +21,9 @@ import com.remedy.alpha.model.RemedyMessage;
 
 public class Utils {
 
-    public static final String Danny2_slackToken = "xoxp-303668528658-317362446608-351876088661-807a405396e3c7ed25b8df7a968ff13d";
+    public static final String Danny2_slackToken = "";
+    public static SlackRealTimeMessagingClient mRtmClient;
+    public static SlackWebApiClient mWebApiClient;
 
     public static RemedyMessage createRemedyMessage(String agentID, String userID, boolean sentByCustomer, Date sentDate){
         RemedyMessage rMessage = new RemedyMessage();
