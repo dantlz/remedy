@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.remedy.alpha.R;
@@ -27,6 +28,9 @@ public class QueueActivity extends AppCompatActivity {
     private String type;
 
     private AVLoadingIndicatorView avi;
+    private TextView statusTextViewOne; //"There are "
+    private TextView statusTextViewCount; //"# people"
+    private TextView statusTextViewTwo; //" in front of you"
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,17 @@ public class QueueActivity extends AppCompatActivity {
         phoneNumber = getIntent().getStringExtra("PHONE");
         notes = getIntent().getStringExtra("NOTES");
         type = getIntent().getStringExtra("TYPE");
+
+        statusTextViewOne = findViewById(R.id.statusTextViewOne);
+        statusTextViewCount = (TextView)findViewById(R.id.statusTextViewCount);
+        statusTextViewTwo = findViewById(R.id.statusTextViewTwo);
+        if(type.equals("CALL")){
+            statusTextViewOne.setText("Your ");
+            statusTextViewCount.setText("call");
+            statusTextViewTwo.setText(" will soon be connected");
+        } else {
+            // TODO: replace statusTextViewCount with number of people
+        }
 
         avi = findViewById(R.id.loading_indicator);
         avi.show();

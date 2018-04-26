@@ -18,12 +18,50 @@
             android:contentDescription="@string/chat_queue_bg_img"
             android:scaleType="fitCenter" />
 
+        <LinearLayout
+            android:id="@+id/textViewLayout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="365dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/statusTextViewOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="There are "
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/roboto_condensed_bold"
+                android:textSize="24sp"/>
+
+            <TextView
+                android:id="@+id/statusTextViewCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6 people"
+                android:textColor="@color/buttonColor"
+                android:fontFamily="@font/roboto_condensed_bold"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/statusTextViewTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" in front of you"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/roboto_condensed_bold"
+                android:textSize="24sp"/>
+
+        </LinearLayout>
+
         <com.wang.avi.AVLoadingIndicatorView
             android:id="@+id/loading_indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_marginTop="50dp"
+            android:layout_alignTop="@id/textViewLayout"
             app:indicatorName="BallPulseIndicator"
             />
 
