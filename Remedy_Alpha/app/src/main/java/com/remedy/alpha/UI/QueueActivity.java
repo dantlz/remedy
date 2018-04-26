@@ -55,14 +55,11 @@ public class QueueActivity extends AppCompatActivity {
             statusTextViewCount.setText("call");
             statusTextViewTwo.setText(" will soon be connected");
         } else {
-
+            mHandler = new Handler();
+            startStatusUpdate();
         }
-
         avi = findViewById(R.id.loading_indicator);
         avi.show();
-
-        mHandler = new Handler();
-        startStatusUpdate();
 
         openConnection();
 
