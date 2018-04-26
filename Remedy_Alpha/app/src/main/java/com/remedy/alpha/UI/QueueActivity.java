@@ -50,6 +50,8 @@ public class QueueActivity extends AppCompatActivity {
         statusTextViewCount.setText("4 people");
         statusTextViewTwo = findViewById(R.id.statusTextViewTwo);
 
+        avi = findViewById(R.id.loading_indicator);
+        avi.smoothToShow();
         if(type.equals("CALL")){
             statusTextViewOne.setText("Your ");
             statusTextViewCount.setText("call");
@@ -58,10 +60,6 @@ public class QueueActivity extends AppCompatActivity {
             mHandler = new Handler();
             startStatusUpdate();
         }
-        avi = findViewById(R.id.loading_indicator);
-        avi.show();
-
-        openConnection();
 
 //        if (type.equals("CHAT"))
 //            avi.show(); //avi.smoothToShow();
@@ -85,6 +83,12 @@ public class QueueActivity extends AppCompatActivity {
                 if(count > 0){
                     count--;
                     statusTextViewCount.setText(count + " people");
+                } else {
+                    statusTextViewOne.setText("Your ");
+                    statusTextViewCount.setText("agent");
+                    statusTextViewTwo.setText(" is ready to chat!");
+                    avi.smoothToHide();
+                    openConnection();
                 }
             } finally {
                 mHandler.postDelayed(mStatusChecker, 3000);
