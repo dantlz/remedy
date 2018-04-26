@@ -32,8 +32,28 @@ public class QueueActivity extends AppCompatActivity {
     private TextView statusTextViewCount; //"# people"
     private TextView statusTextViewTwo; //" in front of you"
 
-    private int count = 4;
+//    private int count = 4;
+
     private Handler mHandler;
+
+    private Runnable mStatusChecker = new Runnable() {
+        @Override
+        public void run() {
+            try {
+//                if(count > 0){
+//                    count--;
+//                    statusTextViewCount.setText(count + " people");
+//                } else {
+                statusTextViewOne.setText("Your ");
+                statusTextViewCount.setText("agent");
+                statusTextViewTwo.setText(" is ready to chat!");
+                avi.smoothToHide();
+//                }
+            } finally {
+                mHandler.postDelayed(mStatusChecker, 3000);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +67,7 @@ public class QueueActivity extends AppCompatActivity {
 
         statusTextViewOne = findViewById(R.id.statusTextViewOne);
         statusTextViewCount = (TextView)findViewById(R.id.statusTextViewCount);
-        statusTextViewCount.setText("4 people");
+//        statusTextViewCount.setText("4 people");
         statusTextViewTwo = findViewById(R.id.statusTextViewTwo);
 
         avi = findViewById(R.id.loading_indicator);
@@ -61,40 +81,9 @@ public class QueueActivity extends AppCompatActivity {
             startStatusUpdate();
         }
 
-//        if (type.equals("CHAT"))
-//            avi.show(); //avi.smoothToShow();
-//            Handler handler = new Handler();
-//            Runnable response =  new Runnable() {
-//                public void run() {
-//
-//                }
-//            };
-//            handler.postDelayed(response, 3000);
-//        if(type.equals("CALL")) {
-//            avi.show(); //avi.smoothToShow();
-//        }
-
+        openConnection();
     }
 
-    Runnable mStatusChecker = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                if(count > 0){
-                    count--;
-                    statusTextViewCount.setText(count + " people");
-                } else {
-                    statusTextViewOne.setText("Your ");
-                    statusTextViewCount.setText("agent");
-                    statusTextViewTwo.setText(" is ready to chat!");
-                    avi.smoothToHide();
-                    openConnection();
-                }
-            } finally {
-                mHandler.postDelayed(mStatusChecker, 3000);
-            }
-        }
-    };
 
     void startStatusUpdate() {
         mStatusChecker.run();
@@ -151,7 +140,7 @@ public class QueueActivity extends AppCompatActivity {
 
     private void establishChannel(){
         //TODO Talk to queue channel
-        final SlackMethod joinMethod = new ChannelJoinMethod("queue"); //TODO
+        final SlackMethod joinMethod = new ChannelJoinMethod(Utils.currChannelName);
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -186,6 +175,9 @@ public class QueueActivity extends AppCompatActivity {
             System.out.println("###### " + message);
 
             if (type.equals("CHAT")){
+                avi.smoothToHide();
+                stopStatusUpdate();
+
                 System.out.println("###### " + message);
 
                 Intent intent;
@@ -206,9 +198,4 @@ public class QueueActivity extends AppCompatActivity {
         //TODO else if check for queue reduction
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        stopStatusUpdate();
-    }
 }

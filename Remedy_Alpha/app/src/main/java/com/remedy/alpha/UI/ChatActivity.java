@@ -182,8 +182,6 @@ public class ChatActivity extends AppCompatActivity {
                             String text = objNode.findPath("text").asText();
 
 
-                            System.out.println("^^^^^^^^^^^ " + text); //TODO
-
 
                             message.setMessage(text);
                             message.setSendDate(new Date( (long) (objNode.findPath("ts").asInt()) * 1000));

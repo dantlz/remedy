@@ -71,7 +71,7 @@ public class Utils {
     }
 
     public static void postMessage(String channel, String username, String text){
-        final ChatPostMessageMethod message = new ChatPostMessageMethod("queue", text); //TODO
+        final ChatPostMessageMethod message = new ChatPostMessageMethod(Utils.currChannelName, text);
         message.setUsername(username);
         Thread thread = new Thread() {
             @Override
