@@ -32,6 +32,9 @@ public class QueueActivity extends AppCompatActivity {
     private TextView statusTextViewCount; //"# people"
     private TextView statusTextViewTwo; //" in front of you"
 
+    private int count = 4;
+    private Handler mHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,20 +47,24 @@ public class QueueActivity extends AppCompatActivity {
 
         statusTextViewOne = findViewById(R.id.statusTextViewOne);
         statusTextViewCount = (TextView)findViewById(R.id.statusTextViewCount);
+        statusTextViewCount.setText("4 people");
         statusTextViewTwo = findViewById(R.id.statusTextViewTwo);
+
         if(type.equals("CALL")){
             statusTextViewOne.setText("Your ");
             statusTextViewCount.setText("call");
             statusTextViewTwo.setText(" will soon be connected");
         } else {
-            // TODO: replace statusTextViewCount with number of people
+
         }
 
         avi = findViewById(R.id.loading_indicator);
         avi.show();
 
-        openConnection();
+        mHandler = new Handler();
+        startStatusUpdate();
 
+        openConnection();
 
 //        if (type.equals("CHAT"))
 //            avi.show(); //avi.smoothToShow();
@@ -72,6 +79,28 @@ public class QueueActivity extends AppCompatActivity {
 //            avi.show(); //avi.smoothToShow();
 //        }
 
+    }
+
+    Runnable mStatusChecker = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                if(count > 0){
+                    count--;
+                    statusTextViewCount.setText(count + " people");
+                }
+            } finally {
+                mHandler.postDelayed(mStatusChecker, 3000);
+            }
+        }
+    };
+
+    void startStatusUpdate() {
+        mStatusChecker.run();
+    }
+
+    void stopStatusUpdate() {
+        mHandler.removeCallbacks(mStatusChecker);
     }
 
     private void openConnection() {
@@ -174,5 +203,11 @@ public class QueueActivity extends AppCompatActivity {
             }
         }
         //TODO else if check for queue reduction
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopStatusUpdate();
     }
 }
