@@ -12,23 +12,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".UI.ProbDescActivity">
+        <activity android:name=".UI.ProbDescActivity">
+        </activity>
+        <activity android:name=".UI.ContactTypeActivity" />
+        <activity android:name=".UI.ContactInfoActivity" />
+        <activity android:name=".UI.QueueActivity" />
+        <activity android:name=".UI.ChatActivity" />
+        <activity android:name=".UI.HelpPagerActivity" />
+        <activity android:name=".UI.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".UI.ContactTypeActivity" />
-        <activity
-            android:name=".UI.ContactInfoActivity" />
-        <activity
-            android:name=".UI.QueueActivity" />
-        <activity
-            android:name=".UI.ChatActivity" />
-        <activity android:name=".UI.HelpPagerActivity"></activity>
     </application>
 
 </manifest>
