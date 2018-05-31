@@ -23,7 +23,7 @@ import com.remedy.alpha.model.RemedyMessage;
 
 public class Utils {
 
-    public static final String Danny2_slackToken = "";
+    public static final String Danny2_slackToken = ""; //TODO PUT TOKEN HERE
     public static SlackRealTimeMessagingClient mRtmClient;
     public static SlackWebApiClient mWebApiClient;
     public static String currID;

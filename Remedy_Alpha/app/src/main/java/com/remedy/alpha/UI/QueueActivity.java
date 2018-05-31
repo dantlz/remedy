@@ -32,8 +32,6 @@ public class QueueActivity extends AppCompatActivity {
     private TextView statusTextViewCount; //"# people"
     private TextView statusTextViewTwo; //" in front of you"
 
-//    private int count = 4;
-
     private Handler mHandler;
 
     private Runnable mStatusChecker = new Runnable() {
@@ -152,7 +150,7 @@ public class QueueActivity extends AppCompatActivity {
 
                     if(type.equals("CALL")) {
                         //TODO Send a message to add myself to queue
-                        final String text = "Call me with command: \n@phonebot call +1" + phoneNumber;
+                        final String text = "Call me with command: \n/yodel +1" + phoneNumber;
                         Utils.postMessage(Utils.currChannelName, Utils.currUsername, text);
                     }
 
@@ -171,7 +169,7 @@ public class QueueActivity extends AppCompatActivity {
     private void messageHandler_Message(JsonNode message) {
         System.out.println("###### " + message);
 
-        if(message.get("text").asText().equals("ready")){
+        if(message.get("text").asText().equals("!@#ready")){
             System.out.println("###### " + message);
 
             if (type.equals("CHAT")){

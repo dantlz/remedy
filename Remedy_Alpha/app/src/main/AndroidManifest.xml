@@ -18,7 +18,6 @@
         <activity android:name=".UI.ContactInfoActivity" />
         <activity android:name=".UI.QueueActivity" />
         <activity android:name=".UI.ChatActivity" />
-        <activity android:name=".UI.HelpPagerActivity" />
         <activity android:name=".UI.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

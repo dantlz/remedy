@@ -186,7 +186,8 @@ public class ChatActivity extends AppCompatActivity {
                             message.setMessage(text);
                             message.setSendDate(new Date( (long) (objNode.findPath("ts").asInt()) * 1000));
                             if(text.contains("Call me with command:") ||
-                                    text.contains("This customer has"))
+                                    text.contains("This customer has") ||
+                                    text.contains("!@#ready"))
                                 continue;
 
                             channelHistory.add(message);
@@ -194,7 +195,9 @@ public class ChatActivity extends AppCompatActivity {
                             if(firstEntry &&
                                     sentByCustomer &&
                                     !text.contains("Call me with command:") &&
-                                    !text.contains("Current customer satisfaction index:")){
+                                    !text.contains("This customer has:") &&
+                                    !text.contains("!@#ready")
+                                    ){
                                 input = input + (text) + " ";
                             }
                         }
